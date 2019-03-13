@@ -1,5 +1,6 @@
 import axios, { AxiosPromise } from 'axios';
 import sha1 from 'sha1';
+import signale from 'signale';
 
 interface IResponse {
   data: string;
@@ -18,7 +19,7 @@ function fetchPasswordRange(hashSubstr: string) {
 function parseArgs() {
   passwords = process.argv.slice(2);
   if (!passwords.length) {
-    console.log(NO_PASSWORDS_PROVIDED);
+    signale.error(NO_PASSWORDS_PROVIDED);
     process.exit();
   }
 }
@@ -37,10 +38,10 @@ function findMatch(hashedPassword: string, possibleHashes: string[]) {
 function logResult(password: string, foundHash: string) {
   if (foundHash) {
     const [hash, count] = foundHash.split(':');
-    console.log(`The following password was found: ${password}`);
-    console.log(`Hash: ${hash}, Occurence: ${count}\n`);
+    signale.warn(`The following password was found: ${password}`);
+    signale.warn(`Hash: ${hash}, Occurence: ${count}\n`);
   } else {
-    console.log(`The following password was not found: ${password}`);
+    signale.success(`The following password was not found: ${password}`);
   }
 }
 
@@ -49,7 +50,7 @@ async function safeFetchResults(promises: Array<AxiosPromise<any>>) {
     const responses = await Promise.all(promises);
     return responses;
   } catch (e) {
-    console.error(`Error fetching results: ${e.message}`);
+    signale.error(`Error fetching results: ${e.message}`);
     process.exit();
   }
 }
@@ -65,6 +66,7 @@ async function run() {
   const responses = await safeFetchResults(fetchResults);
   const possibleHashes = responses.map(response => getParsedResponse(response));
 
+  console.log();
   for (let i = 0; i < hashedPasswords.length; i++) {
     const match = findMatch(hashedPasswords[i], possibleHashes[i]);
     logResult(passwords[i], match);
