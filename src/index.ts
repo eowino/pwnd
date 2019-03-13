@@ -1,12 +1,13 @@
-import axios from "axios";
-import sha1 from "sha1";
+import axios, { AxiosPromise } from 'axios';
+import sha1 from 'sha1';
 
 interface IResponse {
   data: string;
 }
 
-const URL = "https://api.pwnedpasswords.com/range/";
-const NO_PASSWORDS_PROVIDED = "Please provide a list of passwords to check";
+const URL = 'https://api.pwnedpasswords.com/range/';
+const NO_PASSWORDS_PROVIDED = 'Please provide a list of passwords to check';
+
 let passwords: string[] = [];
 let hashedPasswords: string[] = [];
 
@@ -23,24 +24,19 @@ function parseArgs() {
 }
 
 function getParsedResponse(response: IResponse): string[] {
-  try {
-    const data = response.data;
-    return data.split("\r\n");
-  } catch {
-    return [];
-  }
+  return response.data.split('\r\n');
 }
 
 function findMatch(hashedPassword: string, possibleHashes: string[]) {
   return possibleHashes.find(possibleHash => {
-    const [hash] = possibleHash.split(":");
+    const [hash] = possibleHash.split(':');
     return hashedPassword.includes(hash);
   });
 }
 
 function logResult(password: string, foundHash: string) {
   if (foundHash) {
-    const [hash, count] = foundHash.split(":");
+    const [hash, count] = foundHash.split(':');
     console.log(`The following password was found: ${password}`);
     console.log(`Hash: ${hash}, Occurence: ${count}\n`);
   } else {
@@ -48,15 +44,25 @@ function logResult(password: string, foundHash: string) {
   }
 }
 
+async function safeFetchResults(promises: Array<AxiosPromise<any>>) {
+  try {
+    const responses = await Promise.all(promises);
+    return responses;
+  } catch (e) {
+    console.error(`Error fetching results: ${e.message}`);
+    process.exit();
+  }
+}
+
 async function run() {
   parseArgs();
   hashedPasswords = passwords.map(password =>
-    (sha1(password) as string).toUpperCase()
+    (sha1(password) as string).toUpperCase(),
   );
-  const fetchResults = hashedPasswords.map(pwd =>
-    fetchPasswordRange(pwd.substring(0, 5))
+  const fetchResults = hashedPasswords.map(hashedPassword =>
+    fetchPasswordRange(hashedPassword.substring(0, 5)),
   );
-  const responses = await Promise.all(fetchResults);
+  const responses = await safeFetchResults(fetchResults);
   const possibleHashes = responses.map(response => getParsedResponse(response));
 
   for (let i = 0; i < hashedPasswords.length; i++) {
