@@ -16,7 +16,7 @@ A simple CLI tool that takes a list of passwords as shown below, queries the [ha
 npm install pwnd
 ```
 
-you can also use `npx` if you're using npm version `npm@5.2.0` and above
+You can also use `npx` if you're using npm version `npm@5.2.0` and above
 
 ```bash
 npx pwnd password1 reallylongpasswordoverhere other etc.
