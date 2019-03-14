@@ -73,7 +73,7 @@ async function safeFetchResults(promises: Array<AxiosPromise<any>>) {
   }
 }
 
-async function run() {
+export async function run() {
   parseArgs();
   hashedPasswords = passwords.map(password =>
     (sha1(password) as string).toUpperCase(),
@@ -90,5 +90,3 @@ async function run() {
     logResult(passwords[i], match);
   }
 }
-
-run();
