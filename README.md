@@ -10,6 +10,20 @@
 
 A simple CLI tool that takes a list of passwords as shown below, queries the [haveibeenpwned](https://haveibeenpwned.com/) API and lets you know if they have been compromised in a data breach.
 
+## Why
+
+Use a password that has yet to be leaked in a breach.
+
+## How
+
+You provide one or more passwords which are hashed using SHA-1 (it's ok as the password isn't stored anywhere).
+Then using a system called `k-anonymity`, only the first five characters of your hashed password are used to query the
+`pwned` API which subsequently returns a set of hashed passwords that **might** match a given password.
+
+The actually checking to see if a given password has been breached happens locally so your actual passwords are **never**
+sent anywhere ([read more](https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2)).
+
+
 ## Install
 
 ```bash
