@@ -1,4 +1,5 @@
 import axios, { AxiosPromise } from 'axios';
+import { join } from 'path';
 import sha1 from 'sha1';
 import signale from 'signale';
 
@@ -6,8 +7,11 @@ interface IResponse {
   data: string;
 }
 
+const CONFIG_FILE = 'pwnd-config.json';
 const URL = 'https://api.pwnedpasswords.com/range/';
-const NO_PASSWORDS_PROVIDED = 'Please provide a list of passwords to check';
+const NO_PASSWORDS_PROVIDED = 'Please provide a list of passwords to query.';
+const ATTEMPT_CONFIG = `Attempting to read from ${CONFIG_FILE}`;
+const NO_CONFIG = `Could not find config file here: `;
 
 let passwords: string[] = [];
 let hashedPasswords: string[] = [];
@@ -19,7 +23,21 @@ function fetchPasswordRange(hashSubstr: string) {
 function parseArgs() {
   passwords = process.argv.slice(2);
   if (!passwords.length) {
+    signale.info(ATTEMPT_CONFIG);
+    console.log();
+    readConfigFile();
+  }
+}
+
+function readConfigFile() {
+  const CWD = process.cwd();
+  try {
+    const pathToConfig = join(CWD, CONFIG_FILE);
+    const config = require(pathToConfig);
+    passwords = config.passwords;
+  } catch {
     signale.error(NO_PASSWORDS_PROVIDED);
+    signale.error(`${NO_CONFIG} ${CWD}`);
     process.exit();
   }
 }
