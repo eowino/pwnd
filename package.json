@@ -1,6 +1,6 @@
 {
   "name": "pwnd",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI that checks if your passwords have been compromised in a data breach",
   "main": "./bin/index.js",
   "bin": {
