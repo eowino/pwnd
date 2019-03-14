@@ -59,7 +59,7 @@ function logResult(password: string, foundHash: string) {
     signale.warn(`The following password was found: ${password}`);
     signale.warn(`Hash: ${hash}, Occurence: ${count}\n`);
   } else {
-    signale.success(`The following password was not found: ${password}`);
+    signale.success(`The following password was not found: ${password}\n`);
   }
 }
 
