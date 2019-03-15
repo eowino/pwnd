@@ -3,8 +3,12 @@
 </h1>
 
 <h4 align="center">
-  🔍 A CLI that checks if your passwords have been compromised in a data breach
+  🔍 🔓 A CLI that checks if your passwords have been compromised in a data breach
 </h4>
+
+<p align='center'>
+<img src="https://user-images.githubusercontent.com/9787512/54433310-72fb2580-4723-11e9-8bad-58c388f56314.gif" width='640' alt='npx pwnd' />
+</p>
 
 ## Description
 
