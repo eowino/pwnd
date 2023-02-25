@@ -1,0 +1,12 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Prevent direct commits to "master" branch
+branch="$(git rev-parse --abbrev-ref HEAD)"
+if [ "$branch" = "master" ]; then
+  echo "⛔️  You can't commit directly to ${branch} branch, please use a pull request instead."
+  exit 1
+fi
+
+# Lint staged files
+npx lint-staged
