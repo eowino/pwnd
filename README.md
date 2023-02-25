@@ -7,7 +7,7 @@
 </h4>
 
 <p align='center'>
-<img src="https://user-images.githubusercontent.com/9787512/54433310-72fb2580-4723-11e9-8bad-58c388f56314.gif" width='640' alt='npx pwnd' />
+<img src="https://user-images.githubusercontent.com/9787512/221374924-4b4755f2-2010-4753-9926-abbfe77398d0.gif" width='640' alt='npx pwnd' />
 </p>
 
 ## Description
