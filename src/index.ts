@@ -55,13 +55,13 @@ function findMatch(hashedPassword: string, possibleHashes: string[]) {
     });
 }
 
-function logResult(password: string, foundHash: string) {
+function logResult(foundHash: string, index: number) {
     if (foundHash) {
-        const [hash, count] = foundHash.split(':');
-        signale.warn(`The following password was found: ${password}`);
-        signale.warn(`Hash: ${hash}, Occurence: ${count}\n`);
+        const [, count] = foundHash.split(':');
+        signale.warn(`The password listed at index {${index}} was found`);
+        signale.warn(`Occurrence: ${count}\n`);
     } else {
-        signale.success(`The following password was not found: ${password}\n`);
+        signale.success(`The password listed at index {${index}} was not found\n`);
     }
 }
 
@@ -83,8 +83,8 @@ export async function run() {
     const possibleHashes = responses.map((response) => getParsedResponse(response));
 
     console.log();
-    for (let i = 0; i < hashedPasswords.length; i++) {
-        const match = findMatch(hashedPasswords[i], possibleHashes[i]);
-        logResult(passwords[i], match);
+    for (let index = 0; index < hashedPasswords.length; index++) {
+        const match = findMatch(hashedPasswords[index], possibleHashes[index]);
+        logResult(match, index);
     }
 }
